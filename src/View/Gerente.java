@@ -35,6 +35,9 @@ public class Gerente {
 			case 6: cadastrarDepoimento(user);
 			break;
 			case 7: cadastrarImagem(user);
+			break;
+			default:
+			break;
 			}
 		}
 	}
