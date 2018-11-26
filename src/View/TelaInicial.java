@@ -2,7 +2,11 @@ package View;
 
 import java.io.DataInput;
 import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -11,35 +15,37 @@ import Controler.SistemaCadastro;
 import Model.Usuario;
 
 public class TelaInicial {
-	public static void main(String[] args) {
+	
+	public static void main(String[] args) throws IOException {
 		ArrayList<Usuario> listUser = new ArrayList<>();
 		while(true){
-			try {
-				ServerSocket servidor = new ServerSocket(12345);
-				System.out.println("Servidor ouvindo a porta 12345");
+			try {				
 				while(true) {
-					Socket cliente = servidor.accept();
-					System.out.println("Cliente conectado: " + cliente.getInetAddress().getHostAddress());
-					ObjectOutputStream saida = new ObjectOutputStream(cliente.getOutputStream());
-					DataInputStream dis = new DataInputStream(cliente.getInputStream()); // Saída de dados do cliente
-
-				    while(true){
-				        if(dis.available() >0){
-				            String mensagem = ((DataInput) dis).readUTF(); // Lê a tal mensagem
-				            System.out.println(mensagem); // E exibe na tela
-				            /*listUser = cadastrar("login1", "senha1", listUser);
-				    		System.out.println(listUser);
-				    		ServerSocket server = new ServerSocket(8000);
-				    		
-				    		Usuario user = new Usuario("login1", "senha");
-				    		Gerente start = new Gerente();
-				    		start.Iniciar("login", "senha", listUser);	*/	
-				            break;
-				        } // Chegou alguma coisa?
-				    }        
-					saida.flush();
-					saida.close();
-					cliente.close();
+					DatagramSocket serverSocket = new DatagramSocket(7000);
+					byte[] receiveData = new byte[1024];
+					DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
+					serverSocket.receive(receivePacket);
+					String sentence = new String( receivePacket.getData());
+					System.out.println("RECEIVED: " + sentence);
+					String [] struct = sentence.split("-");
+					
+					if(struct[0].equals("1")) {
+						cadastrar(struct[1], struct[2], listUser);
+					} else if(struct[0].equals("2")) {
+						new Thread() {							
+						    public void run() {
+						    	Gerente start = new Gerente();
+					    		try {
+									start.Iniciar(struct[1], struct[2], listUser);
+								} catch (IOException e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}
+						    }
+						}.start();
+					}
+					
+					serverSocket.close();
 				}
 			}   
 			catch(Exception e) {
@@ -47,9 +53,13 @@ public class TelaInicial {
 			}
 		}
 	}     
+		
+	
 	
 	public static ArrayList<Usuario> cadastrar(String login, String senha, ArrayList<Usuario> listUser) {
 		return SistemaCadastro.iniciaCadastro(login, senha, listUser);
 	}
 
+	
 }
+

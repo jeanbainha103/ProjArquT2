@@ -1,18 +1,17 @@
 package Model;
 
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 
 public class Image implements Post{
 	private Usuario user;
-	private String comments;
+	private ArrayList<String> comments;
 	private BufferedImage image;
 	private String title;
 	
-	public Image(Usuario user, BufferedImage image, String title) {
+	public Image(Usuario user) {
 		super();
 		this.user = user;
-		this.image = image;
-		this.title = title;
 	}
 
 	@Override
@@ -21,19 +20,27 @@ public class Image implements Post{
 		
 	}
 
-	public String getComments() {
+	public ArrayList<String> getComments() {
 		return comments;
 	}
 
 	public void setComments(String comments) {
-		this.comments = comments;
+		this.comments.add(comments);
 	}
 
 	public BufferedImage getContent() {
 		return image;
 	}
 
+	public void setTitulo(String titulo) {
+		this.title = titulo;
+	}
+
 	public String getTitle() {
 		return title;
+	}
+	
+	public void setContent(BufferedImage content) {
+		this.image = content;
 	}
 }
