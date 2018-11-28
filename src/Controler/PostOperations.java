@@ -1,6 +1,7 @@
 package Controler;
 
+import Model.Usuario;
+
 public interface PostOperations {
-	void inserirTitulo(String titulo);
-	void inserirComment(String comment);
+	public void showPost(Usuario user);
 }

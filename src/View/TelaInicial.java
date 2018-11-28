@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
+import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -21,17 +22,30 @@ public class TelaInicial {
 		while(true){
 			try {				
 				while(true) {
-					DatagramSocket serverSocket = new DatagramSocket(7000);
+					DatagramSocket serverSocket = new DatagramSocket(7027);
 					byte[] receiveData = new byte[1024];
 					DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
 					serverSocket.receive(receivePacket);
 					String sentence = new String( receivePacket.getData());
 					System.out.println("RECEIVED: " + sentence);
 					String [] struct = sentence.split("-");
+					serverSocket.close();
 					
 					if(struct[0].equals("1")) {
-						cadastrar(struct[1], struct[2], listUser);
+						ArrayList<Usuario> listUserAux = new ArrayList<>();
+						listUserAux=cadastrar(struct[1], struct[2], listUserAux);	
+						listUser.add(listUserAux.get(0));
 					} else if(struct[0].equals("2")) {
+						DatagramSocket clientSocket = new DatagramSocket();
+					    InetAddress IPAddress = InetAddress.getByName("localhost");
+					    byte[] sendData = new byte[1024];	
+					    String message = "logado";
+						sendData = message.getBytes();
+						DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, IPAddress, 9027);
+						clientSocket.send(sendPacket);
+
+
+						clientSocket.close();
 						new Thread() {							
 						    public void run() {
 						    	Gerente start = new Gerente();
@@ -44,8 +58,6 @@ public class TelaInicial {
 						    }
 						}.start();
 					}
-					
-					serverSocket.close();
 				}
 			}   
 			catch(Exception e) {

@@ -1,20 +1,24 @@
 package Controler;
 
+import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+
+import Model.Depoimento;
 import Model.Image;
 import Model.Usuario;
 
 public class ImagesOperations implements PostOperations{
-	Image image = new Image(null);
 	public Image cadastro(Image im, Usuario user, String content, String titulo) {
-		this.image = im;
-		inserirTitulo(titulo);
+		im.setContent(content);
+		im.setTitulo(titulo);
 		return im;
 	}
 
-	public void inserirTitulo(String titulo) {
-		image.setTitulo(titulo);
-	}
-	public void inserirComment(String comment) {
-		image.setComments(comment);
+	public void showPost(Usuario user) {
+		ArrayList<Image> all = user.listaImages;
+		for (Image img : all) {
+			System.out.println(img.getTitle());
+			System.out.println(img.getContent());
+		}
 	}
 }

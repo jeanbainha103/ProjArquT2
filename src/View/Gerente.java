@@ -14,8 +14,8 @@ import Model.Image;
 import Model.Usuario;
 
 public class Gerente {
-	private ArrayList<Image> allImages;
-	private ArrayList<Depoimento> allDepoimentos;
+	private static ArrayList<Image> allImages = new ArrayList<>();;
+	private static ArrayList<Depoimento> allDepoimentos = new ArrayList<>();;
 	private Usuario user;
 	private boolean logado = false;
 	public void Iniciar(String login, String senha, ArrayList<Usuario> listUser) throws IOException {
@@ -25,13 +25,14 @@ public class Gerente {
 				user = usuario;
 		}
 		while(logado) {
-			DatagramSocket serverSocket = new DatagramSocket(8000);
+			DatagramSocket serverSocket = new DatagramSocket(8027);
 			byte[] receiveData = new byte[1024];
 			DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
 			serverSocket.receive(receivePacket);
 			String sentence = new String( receivePacket.getData());
 			System.out.println("RECEIVED: " + sentence);
 			String [] struct = sentence.split("-");
+			System.out.println("server-8000");
 			
 			switch(Integer.parseInt(struct[0])) {
 			case 1: logado = false;
@@ -70,17 +71,19 @@ public class Gerente {
 	}
 	
 	public void verSeusDepoimentos(Usuario user) {
-		System.out.println(user.getListaDepoimentos().get(0));
+		DepoimentoOperations d = new DepoimentoOperations();
+		d.showPost(user);
 	}
 	
 	public void verSuasImages(Usuario user) {
-		System.out.println(user.getListaImages().get(0));
+		ImagesOperations i = new ImagesOperations();
+		i.showPost(user);
 	}
 	
 	public void cadastrarDepoimento(Usuario user, String content, String titulo) {
 		Depoimento depoimento = new Depoimento(user);
 		DepoimentoOperations d = new DepoimentoOperations();
-		d.cadastro(depoimento, user, content, titulo);
+		depoimento = d.cadastro(depoimento, user, content, titulo);
 		allDepoimentos.add(depoimento);
 	}
 	
