@@ -12,6 +12,8 @@ public class Usuario {
 		super();
 		this.login = login;
 		this.senha = senha;
+		listaDepoimentos = new ArrayList<Depoimento>();
+		listaImages = new ArrayList<Image>();
 	}
 
 	public String getLogin() {

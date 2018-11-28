@@ -22,7 +22,7 @@ public class TelaInicial {
 		while(true){
 			try {				
 				while(true) {
-					DatagramSocket serverSocket = new DatagramSocket(7027);
+					DatagramSocket serverSocket = new DatagramSocket(7033);
 					byte[] receiveData = new byte[1024];
 					DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
 					serverSocket.receive(receivePacket);
@@ -41,7 +41,7 @@ public class TelaInicial {
 					    byte[] sendData = new byte[1024];	
 					    String message = "logado";
 						sendData = message.getBytes();
-						DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, IPAddress, 9027);
+						DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, IPAddress, 9033);
 						clientSocket.send(sendPacket);
 
 

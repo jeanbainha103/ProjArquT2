@@ -11,7 +11,7 @@ public class DepoimentoOperations implements PostOperations{
 	public Depoimento cadastro(Depoimento dep, Usuario user, String content, String titulo) {
 		dep.setContent(content);
 		dep.setTitulo(titulo);
-		user.listaDepoimentos.add(dep);
+		user.AddDepoimento(dep);
 		return dep;
 	}
 	

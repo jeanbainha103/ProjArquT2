@@ -25,7 +25,7 @@ public class Gerente {
 				user = usuario;
 		}
 		while(logado) {
-			DatagramSocket serverSocket = new DatagramSocket(8027);
+			DatagramSocket serverSocket = new DatagramSocket(8033);
 			byte[] receiveData = new byte[1024];
 			DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
 			serverSocket.receive(receivePacket);
